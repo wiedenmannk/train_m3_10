@@ -1,2 +1,17 @@
 <?php
-$pdo = new PDO("mysql:host=localhost;dbname=m3_10", "root", "");
+
+$host = '127.0.0.1';
+$dbname = 'm3_10';
+$user = 'root';
+$password = '';
+
+try {
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        $user,
+        $password
+    );
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die('Verbindung fehlgeschlagen: ' . $e->getMessage());
+}
