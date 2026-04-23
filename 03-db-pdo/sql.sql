@@ -1,0 +1,11 @@
+CREATE DATABASE m3_10;
+
+USE m3_10;
+
+CREATE TABLE kontakte (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    telefon VARCHAR(50),
+    message TEXT
+);
