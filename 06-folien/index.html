@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M3.10 SI – Web, Formulare, Sicherheit & Logs – Final</title>
+  <style>
+    :root {
+      --bg: #10131a;
+      --panel: #171c26;
+      --panel2: #202838;
+      --text: #f5f7fb;
+      --muted: #b7c0d1;
+      --accent: #67d5ff;
+      --accent2: #9ff7c8;
+      --warn: #ffd166;
+      --danger: #ff6b6b;
+      --ok: #7df59a;
+      --code: #0a0d12;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #1c2a3d, var(--bg) 55%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .deck {
+      height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    header.deck-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 22px;
+      background: rgba(10, 13, 18, 0.8);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      font-weight: 700;
+      letter-spacing: .2px;
+    }
+
+    .pill {
+      color: #071015;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .progress-text {
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    main {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      height: 100%;
+      padding: 42px clamp(24px, 5vw, 80px);
+      overflow-y: auto;
+    }
+
+    .slide.active { display: block; }
+
+    .slide-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: clamp(2.1rem, 4.5vw, 4.2rem);
+      line-height: 1.05;
+      margin: 0 0 20px;
+    }
+
+    h2 {
+      color: var(--accent);
+      font-size: clamp(1.4rem, 2.5vw, 2.1rem);
+      margin: 28px 0 14px;
+    }
+
+    h3 { margin: 0 0 8px; color: var(--accent2); }
+    p, li { font-size: clamp(1.05rem, 1.45vw, 1.35rem); line-height: 1.55; }
+    .lead { color: var(--muted); font-size: clamp(1.2rem, 1.9vw, 1.6rem); max-width: 980px; }
+
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.025));
+      border: 1px solid rgba(255,255,255,0.11);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.22);
+    }
+
+    .card.warning { border-color: rgba(255,209,102,.45); }
+    .card.danger { border-color: rgba(255,107,107,.48); }
+    .card.ok { border-color: rgba(125,245,154,.45); }
+
+    .tagline {
+      display: inline-block;
+      color: #071015;
+      background: var(--warn);
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-weight: 800;
+      margin: 8px 0 20px;
+    }
+
+    pre {
+      background: var(--code);
+      color: #e9f2ff;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 18px;
+      padding: 18px;
+      overflow-x: auto;
+      font-size: clamp(.95rem, 1.25vw, 1.2rem);
+      line-height: 1.5;
+    }
+
+    code { color: #d8f4ff; }
+    .mini { font-size: 1rem; color: var(--muted); }
+    .big-claim { font-size: clamp(1.5rem, 3vw, 2.7rem); font-weight: 800; line-height: 1.18; }
+    .center { display: grid; place-items: center; min-height: 62vh; text-align: center; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: clamp(.95rem, 1.2vw, 1.12rem); }
+    th, td { border-bottom: 1px solid rgba(255,255,255,0.12); padding: 12px; text-align: left; vertical-align: top; }
+    th { color: var(--accent); }
+
+    footer.deck-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 22px;
+      background: rgba(10, 13, 18, 0.82);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    button {
+      background: var(--panel2);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      padding: 10px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    button:hover { border-color: var(--accent); }
+    .hint { color: var(--muted); font-size: .95rem; }
+
+    .flow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .flow span {
+      background: var(--panel2);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .arrow { color: var(--accent); font-size: 1.8rem; }
+
+    @media (max-width: 850px) {
+      body { overflow: auto; }
+      .deck { min-height: 100vh; height: auto; }
+      main { overflow: visible; }
+      .slide { min-height: calc(100vh - 120px); }
+      .grid, .grid-3 { grid-template-columns: 1fr; }
+      footer.deck-footer { position: sticky; bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck">
+    <header class="deck-header">
+      <div class="brand"><span class="pill">SI</span> M3.10 – Datenbank & Webseiten verstehen</div>
+      <div class="progress-text"><span id="current">1</span> / <span id="total">1</span></div>
+    </header>
+
+    <main>
+      <!-- Seite 1 Start -->
+      <section class="slide active">
+        <div class="slide-inner center">
+          <div>
+            <div class="tagline">Systemintegration-Fokus</div>
+            <h1>M3.10: Webseiten, Formulare, Sicherheit & Logs</h1>
+            <p class="lead">Nicht primär programmieren – sondern verstehen, prüfen, einordnen und Fehler erkennen.</p>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 1 Ende -->
+      <!-- Seite 2 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Was ist unser Ziel als SI?</h1>
+          <p class="lead">Wir müssen eine Webanwendung fachlich und technisch lesen können.</p>
+          <div class="grid">
+            <div class="card ok"><h3>Wir verstehen</h3><p>Wie Browser, Server, PHP und Datenbank zusammenspielen.</p></div>
+            <div class="card ok"><h3>Wir prüfen</h3><p>Ob Formulare, Methoden, Sicherheit und Logs plausibel sind.</p></div>
+            <div class="card warning"><h3>Wir erkennen Muster</h3><p>Prepared Statements, Hashing, Sessions, Statuscodes und Request-Methoden.</p></div>
+            <div class="card ok"><h3>Praxis als Werkzeug</h3><p>Praxis hilft beim Verstehen: Durch eigene Beispiele und kleine Programme wird klar, wie Webanwendungen intern arbeiten.</p><p>Wir nutzen Programmierung als Werkzeug, um Abläufe zu verstehen und Systeme besser einordnen zu können.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 2 Ende -->
+      <!-- Seite 3 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Der Grundablauf einer Webanwendung</h1>
+          <p class="lead">Dieser Ablauf ist der rote Faden für fast alle Themen in M3.10.</p>
+          <div class="flow">
+            <span>Benutzer</span><b class="arrow">→</b><span>Browser</span><b class="arrow">→</b><span>Request</span><b class="arrow">→</b><span>PHP / Server</span><b class="arrow">→</b><span>Datenbank</span><b class="arrow">→</b><span>Response</span>
+          </div>
+          <pre>Benutzer klickt auf Senden
+→ Browser sendet Formular-Daten
+→ PHP verarbeitet
+→ Datenbank wird gelesen oder geschrieben
+→ Webseite antwortet</pre>
+        </div>
+      </section>
+      <!-- Seite 3 Ende -->
+      <!-- Seite 4 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>HTML/CSS & Web-Standards</h1>
+          <p class="lead">SI muss Web-Begriffe und Standards sicher einordnen können.</p>
+          <div class="grid">
+            <div class="card"><h3>HTML</h3><p>Beschreibt Struktur und Bedeutung des Inhalts.</p><pre>&lt;header&gt;
+&lt;nav&gt;
+&lt;main&gt;
+&lt;section&gt;
+&lt;footer&gt;</pre></div>
+            <div class="card"><h3>CSS</h3><p>Beschreibt Darstellung: Farben, Abstände, Layout.</p><pre>body {
+  font-family: Arial;
+}</pre></div>
+          </div>
+          <p><strong>Hintergrund:</strong> Standards wie W3C/WHATWG sorgen dafür, dass Webseiten in verschiedenen Browsern und Systemen zuverlässig funktionieren.</p>
+        </div>
+      </section>
+      <!-- Seite 4 Ende -->
+      <!-- Seite 5 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Semantik & Barrierefreiheit</h1>
+          <p class="lead">Semantisches HTML hilft Menschen, Browsern, Suchmaschinen und Hilfstechnologien.</p>
+          <p>Semantische HTML-Tags helfen dabei, Inhalte sinnvoll zu strukturieren und für Menschen sowie Programme verständlich zu machen.</p>
+          <div class="grid">
+            <div class="card ok"><h3>Gute Struktur</h3><pre>&lt;main&gt;
+  &lt;section&gt;
+    &lt;h2&gt;Kontakt&lt;/h2&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</pre><p>Der Inhalt ist logisch gegliedert.</p></div>
+            <div class="card ok"><h3>Formular-Zugänglichkeit</h3><pre>&lt;label for="email"&gt;E-Mail&lt;/label&gt;
+&lt;input id="email" name="email"&gt;</pre><p>Screenreader und Nutzer verstehen, welches Feld gemeint ist.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 5 Ende -->
+      <!-- Seite 6 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Formulare lesen und prüfen</h1>
+          <p class="lead">Formularattribute bestimmen, wohin Daten gesendet werden und wie die Übertragung abläuft.</p>
+          <pre>&lt;form action="save.php" method="post" autocomplete="on"&gt;
+  &lt;label for="name"&gt;Name&lt;/label&gt;
+  &lt;input id="name" name="name"&gt;
+  &lt;button&gt;Senden&lt;/button&gt;
+&lt;/form&gt;</pre>
+          <table>
+            <tr><th>Attribut</th><th>Bedeutung</th></tr>
+            <tr><td><code>action</code></td><td>Zieladresse, z. B. <code>save.php</code></td></tr>
+            <tr><td><code>method</code></td><td>Übertragungsart, meist <code>get</code> oder <code>post</code></td></tr>
+            <tr><td><code>autocomplete</code></td><td>Browser darf Eingaben vorschlagen</td></tr>
+            <tr><td><code>novalidate</code></td><td>Browser-validierung wird abgeschaltet – Server muss trotzdem prüfen</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- Seite 6 Ende -->
+      <!-- Seite 7 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>enctype: wichtig bei Datei-Uploads</h1>
+          <p class="lead">Das Attribut bestimmt, wie Formulardaten kodiert übertragen werden.</p>
+          <div class="grid">
+            <div class="card warning"><h3>Normales Formular</h3><pre>&lt;form method="post"&gt;</pre><p>Für normale Textfelder reicht das meistens.</p></div>
+            <div class="card ok"><h3>Datei-Upload</h3><pre>&lt;form method="post"
+      enctype="multipart/form-data"&gt;
+  &lt;input type="file" name="upload"&gt;
+&lt;/form&gt;</pre><p>Ohne diesen Wert kommt die Datei typischerweise nicht korrekt beim Server an.</p></div>
+          </div>
+          <p><strong>SI-Prüffrage:</strong> „Warum funktioniert der Upload nicht?“ – möglicher Grund: falsches oder fehlendes <code>enctype</code>.</p>
+        </div>
+      </section>
+      <!-- Seite 7 Ende -->
+      <!-- Seite 8 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>GET vs. POST</h1>
+          <p class="lead">Einer der wichtigsten Prüfungsbereiche.</p>
+          <table>
+            <tr><th>Frage</th><th>GET</th><th>POST</th></tr>
+            <tr><td>Wo stehen Daten?</td><td>In der URL</td><td>Im Request-Body</td></tr>
+            <tr><td>Sichtbar?</td><td>Ja, z. B. <code>?name=Bob</code></td><td>Nicht direkt in der URL</td></tr>
+            <tr><td>Cache/Bookmark?</td><td>Eher ja</td><td>Eher nein</td></tr>
+            <tr><td>Typischer Zweck</td><td>Lesen, Suchen, Filtern</td><td>Speichern, Ändern, Login, Löschen</td></tr>
+            <tr><td>Seiteneffekte?</td><td>Darf keine Daten verändern</td><td>Darf Daten verändern, z. B. speichern oder löschen</td></tr>
+          </table>
+          <p><strong>Merksatz:</strong> GET = holen/anzeigen. POST = senden/verändern.</p>
+          <p class="mini">Hinweis: In modernen Web-APIs wird für das Löschen oft die HTTP-Methode DELETE verwendet. In klassischen Formularen wird dafür meist POST genutzt.</p>
+        </div>
+      </section>
+      <!-- Seite 8 Ende -->
+      <!-- Seite 9 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Request & Response verstehen</h1>
+          <p class="lead">Ein Formular erzeugt einen Request. Der Server liefert eine Response.</p>
+          <div class="grid">
+            <div class="card"><h3>Request</h3><pre>POST /save.php HTTP/1.1
+Host: localhost
+Content-Type: application/x-www-form-urlencoded
+
+name=Klaus</pre></div>
+            <div class="card"><h3>Response</h3><pre>HTTP/1.1 200 OK
+Content-Type: text/html
+
+&lt;p&gt;Gespeichert&lt;/p&gt;</pre></div>
+          </div>
+          <p><strong>SI-Fokus:</strong> Methode, Ziel, Statuscode und Datenfluss erkennen.</p>
+        </div>
+      </section>
+      <!-- Seite 9 Ende -->
+      <!-- Seite 10 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>PHP/PDO lesen: Was passiert hier?</h1>
+          <p class="lead">Formulardaten werden aus dem Request gelesen, geprüft oder bereinigt und anschließend sicher an die Datenbank übergeben.</p>
+          <pre>$name = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_SPECIAL_CHARS);
+
+$stmt = $pdo->prepare('INSERT INTO kontakte (name) VALUES (:name)');
+$stmt->execute(['name' => $name]);</pre>
+          <div class="grid">
+            <div class="card ok"><h3><code>filter_input</code></h3><p>Liest Eingaben aus Request-Daten, z. B. aus <code>POST</code>, und kann Werte validieren oder bereinigen.</p></div>
+            <div class="card ok"><h3><code>prepare</code> + <code>execute</code></h3><p><code>prepare()</code> bereitet den SQL-Befehl mit Platzhaltern vor. <code>execute()</code> übergibt die echten Werte sicher.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 10 Ende -->
+      <!-- Seite 11 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>SQL Injection erkennen</h1>
+          <p class="lead">Schutz vor SQL Injection: Benutzereingaben werden sicher über Parameter übergeben (Prepared Statements) und nicht direkt in SQL-Befehle eingebaut.</p>
+          <p>Unsicher: Eingaben werden direkt in SQL eingefügt.<br>Sicher: Werte werden getrennt übergeben und nicht als SQL-Code interpretiert.</p>
+          <div class="grid">
+            <div class="card danger"><h3>Unsicheres Muster</h3><pre>$sql = "SELECT * FROM users
+        WHERE name = '$name'";</pre><p>Eingabe wird direkt in SQL eingebaut.</p></div>
+            <div class="card ok"><h3>Sicheres Muster</h3><pre>$stmt = $pdo->prepare(
+  'SELECT * FROM users WHERE name = :name'
+);
+$stmt->execute(['name' => $name]);</pre><p>Wert wird als Parameter übergeben.</p></div>
+          </div>
+          <p><strong>Prüfungsantwort:</strong> Prepared Statements schützen vor SQL Injection, weil Eingaben nicht als SQL-Code interpretiert werden.</p>
+        </div>
+      </section>
+      <!-- Seite 11 Ende -->
+      <!-- Seite 12 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Validierung vs. Sanitizing</h1>
+          <p class="lead">Beide Begriffe werden gerne verwechselt.</p>
+          <div class="grid">
+            <div class="card warning"><h3>Validierung</h3><p>Prüfen: Ist die Eingabe gültig?</p><pre>Ist das eine E-Mail?
+Ist die Zahl im erlaubten Bereich?</pre></div>
+            <div class="card warning"><h3>Sanitizing</h3><p>Bereinigen: Gefährliche oder unerwünschte Zeichen entschärfen.</p><pre>HTML-Zeichen entfernen oder entschärfen</pre></div>
+          </div>
+          <p><strong>Wichtig:</strong> Client-Prüfung hilft dem Benutzer. Server-Prüfung ist Pflicht.</p>
+        </div>
+      </section>
+      <!-- Seite 12 Ende -->
+      <!-- Seite 13 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Sichere Ausgabe: XSS vermeiden</h1>
+          <p class="lead">Daten aus Formularen oder Datenbanken dürfen nicht ungeprüft als HTML ausgegeben werden.</p>
+          <div class="grid">
+            <div class="card danger"><h3>Problem</h3><pre>&lt;script&gt;alert('XSS')&lt;/script&gt;</pre><p>Kann als Script ausgeführt werden, wenn es ungefiltert in HTML landet.</p></div>
+            <div class="card ok"><h3>Entschärfte Ausgabe</h3><pre>echo htmlspecialchars($name);</pre><p>HTML-Sonderzeichen werden als Text angezeigt.</p></div>
+          </div>
+          <p><strong>SI-Fokus:</strong> Eingabeprüfung und sichere Ausgabe gehören zusammen.</p>
+        </div>
+      </section>
+      <!-- Seite 13 Ende -->
+      <!-- Seite 14 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Passwort-Sicherheit</h1>
+          <p class="lead">Passwörter werden nicht im Klartext gespeichert.</p>
+          <div class="grid">
+            <div class="card danger"><h3>Falsch</h3><pre>passwort = "geheim123"</pre><p>Klartext in der Datenbank ist ein schweres Sicherheitsproblem.</p></div>
+            <div class="card ok"><h3>Richtiges Prinzip</h3><pre>password_hash()
+password_verify()</pre><p>Beim Login wird nicht entschlüsselt, sondern geprüft, ob das eingegebene Passwort zum Hash passt.</p></div>
+          </div>
+          <div class="card warning" style="margin-top:22px"><h3>Übertragung beachten</h3><p>Ohne HTTPS werden Daten (auch Passwörter) unverschlüsselt übertragen und können im Netzwerk mitgelesen werden.</p><p>Deshalb müssen Login-Formulare immer über HTTPS gesendet werden.</p></div>
+          <p><strong>Mindestanforderung:</strong> Hashing mit geeigneten Verfahren wie bcrypt oder Argon2; keine Klartextspeicherung.</p>
+        </div>
+      </section>
+      <!-- Seite 14 Ende -->
+      <!-- Seite 15 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Sessions: Login-Zustand merken</h1>
+          <p class="lead">HTTP ist grundsätzlich zustandslos. Sessions helfen, einen Benutzer über mehrere Requests wiederzuerkennen.</p>
+          <p>Eine Session speichert Daten auf dem Server, um einen Benutzer über mehrere Anfragen hinweg wiederzuerkennen. Beispiel: Nach dem Login merkt sich der Server, dass der Benutzer eingeloggt ist.</p>
+          <p>Ohne Session müsste der Zustand immer wieder neu übertragen werden, z. B. über Formularfelder oder URL-Parameter. Das wäre unpraktisch und kann Sicherheitsprobleme verursachen.</p>
+          <div class="flow">
+            <span>Login</span><b class="arrow">→</b><span>Session-ID</span><b class="arrow">→</b><span>Server merkt Zustand</span><b class="arrow">→</b><span>geschützter Bereich</span>
+          </div>
+          <div class="card warning" style="margin-top:22px"><h3>SI-Mindestanforderungen</h3><p>Session-Cookies schützen, Login-Zustand sauber beenden, sensible Bereiche nicht ohne Prüfung anzeigen.</p></div>
+        </div>
+      </section>
+      <!-- Seite 15 Ende -->
+      <!-- Seite 16 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Web-/Server-Logs lesen</h1>
+          <p class="lead">Für SI besonders wichtig: Was sagt uns ein Log über Formularverarbeitung?</p>
+          <pre>127.0.0.1 - - [28/Apr/2026:10:12:05] "GET /form.html HTTP/1.1" 200
+127.0.0.1 - - [28/Apr/2026:10:12:20] "POST /save.php HTTP/1.1" 200
+127.0.0.1 - - [28/Apr/2026:10:12:33] "POST /login.php HTTP/1.1" 500
+127.0.0.1 - - [28/Apr/2026:10:13:02] "GET /admin.php HTTP/1.1" 403</pre>
+          <table>
+            <tr><th>Teil</th><th>Bedeutung</th></tr>
+            <tr><td><code>GET /form.html</code></td><td>Formularseite wurde aufgerufen</td></tr>
+            <tr><td><code>POST /save.php</code></td><td>Formular wurde abgeschickt</td></tr>
+            <tr><td><code>500</code></td><td>Serverfehler, z. B. PHP- oder DB-Problem</td></tr>
+            <tr><td><code>403</code></td><td>Zugriff verboten</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- Seite 16 Ende -->
+      <!-- Seite 17 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Statuscodes einordnen</h1>
+          <div class="grid-3">
+            <div class="card ok"><h3>2xx Erfolg</h3><p><strong>200 OK</strong><br>Request erfolgreich.</p></div>
+            <div class="card warning"><h3>3xx Umleitung</h3><p><strong>301/302</strong><br>Ressource liegt woanders.</p></div>
+            <div class="card warning"><h3>4xx Client-Fehler</h3><p><strong>400/403/404</strong><br>Anfrage fehlerhaft, verboten oder nicht gefunden.</p></div>
+            <div class="card danger"><h3>5xx Server-Fehler</h3><p><strong>500</strong><br>Problem auf Server-Seite.</p></div>
+            <div class="card danger"><h3>Formular-Kontext</h3><p><strong>POST + 500</strong><br>Speichern/Login schlägt serverseitig fehl.</p></div>
+            <div class="card ok"><h3>Maßnahme</h3><p>Logs prüfen, Eingaben prüfen, Fehlermeldung analysieren, Server-Code/DB prüfen.</p></div>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 17 Ende -->
+      <!-- Seite 18 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>Fehler- und Sicherheitsprävention</h1>
+          <p class="lead">Aus Logs und Code-Mustern sollen Maßnahmen abgeleitet werden.</p>
+          <table>
+            <tr><th>Beobachtung</th><th>Mögliche Bedeutung</th><th>Maßnahme</th></tr>
+            <tr><td><code>POST /save.php 500</code></td><td>PHP-/DB-Fehler beim Speichern</td><td>Error-Log prüfen, DB-Verbindung und SQL prüfen</td></tr>
+            <tr><td><code>GET /delete.php?id=7</code></td><td>Löschen per GET</td><td>POST verwenden, Berechtigung prüfen</td></tr>
+            <tr><td>SQL mit String-Verkettung</td><td>SQL-Injection-Risiko</td><td>Prepared Statements nutzen</td></tr>
+            <tr><td>Klartext-Passwort</td><td>kritischer Sicherheitsfehler</td><td><code>password_hash()</code> einsetzen</td></tr>
+          </table>
+        </div>
+      </section>
+      <!-- Seite 18 Ende -->
+      <!-- Seite 19 Start -->
+
+      <section class="slide">
+        <div class="slide-inner">
+          <h1>AP1 vs. AP2 für SI</h1>
+          <div class="grid">
+            <div class="card ok"><h3>AP1: Grundlagenebene</h3><p>Web-Prinzipien, HTML/CSS-Semantik, GET vs. POST, einfache Statuscodes und Log-Hinweise verstehen.</p></div>
+            <div class="card warning"><h3>AP2: Lesefähigkeit & Prüfung</h3><p>Logs interpretieren, Formular-/Header-Aspekte nachvollziehen, Sicherheitsmuster wie Prepared Statements, Hashing und Sessions erkennen.</p></div>
+          </div>
+          <p class="big-claim">Wichtige Fähigkeiten: Webabläufe verstehen, GET/POST unterscheiden, Logs einordnen und Sicherheitsaspekte erkennen.</p>
+        </div>
+      </section>
+      <!-- Seite 19 Ende -->
+      <!-- Seite 20 Start -->
+
+      <section class="slide">
+        <div class="slide-inner center">
+          <div>
+            <h1>Prüfungs-Merksatz</h1>
+            <p class="big-claim">SI liest den Weg der Daten: Formular → Request → Server → Datenbank → Response → Log.</p>
+            <p class="lead">Und erkennt dabei Fehler, Risiken und sinnvolle Maßnahmen.</p>
+          </div>
+        </div>
+      </section>
+      <!-- Seite 20 Ende -->
+    </main>
+
+    <footer class="deck-footer">
+      <button id="prev">← Zurück</button>
+      <div class="hint">Tastatur: ← / → &nbsp; | &nbsp; SI-Fokus: verstehen, prüfen, einordnen</div>
+      <button id="next">Weiter →</button>
+    </footer>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const current = document.getElementById('current');
+    const total = document.getElementById('total');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let index = 0;
+
+    total.textContent = slides.length;
+
+    function showSlide(newIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, newIndex));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+      current.textContent = index + 1;
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+      slides[index].scrollTop = 0;
+    }
+
+    prev.addEventListener('click', () => showSlide(index - 1));
+    next.addEventListener('click', () => showSlide(index + 1));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === 'PageDown') showSlide(index + 1);
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') showSlide(index - 1);
+      if (event.key === 'Home') showSlide(0);
+      if (event.key === 'End') showSlide(slides.length - 1);
+    });
+
+    showSlide(0);
+  </script>
+</body>
+</html>
