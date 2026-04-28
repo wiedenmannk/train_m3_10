@@ -1,1 +1,5 @@
-{ "editor.formatOnSave": true }
+{
+    "editor.formatOnSave": true,
+    "editor.fontWeight": "normal",
+    "editor.fontSize": 16,
+}

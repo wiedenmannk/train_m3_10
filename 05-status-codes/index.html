@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP-Statuscodes</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        .slide {
+            min-height: 100vh;
+            padding: 60px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: #93c5fd;
+        }
+
+        h2 {
+            font-size: 42px;
+            margin-bottom: 24px;
+            color: #bfdbfe;
+        }
+
+        p,
+        li {
+            font-size: 28px;
+            line-height: 1.5;
+        }
+
+        .box {
+            background: #1f2937;
+            border-left: 8px solid #60a5fa;
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: #1f2937;
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid #374151;
+        }
+
+        .code {
+            font-size: 44px;
+            font-weight: bold;
+            color: #facc15;
+        }
+
+        .small {
+            font-size: 22px;
+            color: #d1d5db;
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="slide">
+        <h1>HTTP-Statuscodes</h1>
+        <p>Wenn ein Browser eine Anfrage stellt, antwortet der Server mit einem Statuscode.</p>
+        <div class="box">
+            <p><strong>Browser fragt → Server antwortet</strong></p>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Was sagt ein Statuscode?</h2>
+        <p>Ein Statuscode beschreibt, ob eine Anfrage erfolgreich war oder ob ein Problem aufgetreten ist.</p>
+        <div class="box">
+            <p>Der Statuscode ist die kurze Antwort des Servers.</p>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>Die wichtigsten Codes</h2>
+        <div class="grid">
+            <div class="card">
+                <div class="code">200</div>
+                <p>OK</p>
+                <p class="small">Die Seite wurde erfolgreich geladen.</p>
+            </div>
+            <div class="card">
+                <div class="code">400</div>
+                <p>Bad Request</p>
+                <p class="small">Die Anfrage war fehlerhaft oder unverständlich.</p>
+            </div>
+            <div class="card">
+                <div class="code">403</div>
+                <p>Forbidden</p>
+                <p class="small">Der Zugriff ist verboten.</p>
+            </div>
+            <div class="card">
+                <div class="code">404</div>
+                <p>Not Found</p>
+                <p class="small">Die angeforderte Seite wurde nicht gefunden.</p>
+            </div>
+            <div class="card">
+                <div class="code">500</div>
+                <p>Server Error</p>
+                <p class="small">Auf dem Server ist ein Fehler passiert.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="slide">
+        <h2>400 Bad Request</h2>
+        <p>Der Server versteht die Anfrage nicht richtig.</p>
+        <div class="box">
+            <p>Beispiel: Ein Formular sendet ungültige oder fehlende Daten.</p>
+        </div>
+        <p class="small">Merksatz: Die Anfrage ist kaputt, nicht unbedingt der Server.</p>
+    </section>
+
+    <section class="slide">
+        <h2>Mini-Beispiele</h2>
+        <ul>
+            <li><strong>200:</strong> Startseite lädt normal.</li>
+            <li><strong>400:</strong> Formulardaten sind unvollständig oder fehlerhaft.</li>
+            <li><strong>403:</strong> Zugriff auf Adminbereich ohne Berechtigung.</li>
+            <li><strong>404:</strong> Falsche URL eingegeben.</li>
+            <li><strong>500:</strong> Fehler im Servercode.</li>
+        </ul>
+    </section>
+
+    <section class="slide">
+        <h2>Wie sieht das im Log aus?</h2>
+        <p>Ein Server-Log kann stark vereinfacht so aussehen:</p>
+        <div class="box">
+            <p><code>GET /index.php 200</code></p>
+            <p><code>POST /save.php 400</code></p>
+            <p><code>GET /admin.php 403</code></p>
+            <p><code>GET /seite-gibt-es-nicht.php 404</code></p>
+            <p><code>POST /login.php 500</code></p>
+        </div>
+        <p class="small">Muster: Methode → angefragte Seite → Statuscode</p>
+    </section>
+
+    <section class="slide">
+        <h2>Pizza-Merksatz</h2>
+        <ul>
+            <li><strong>200:</strong> Pizza kommt.</li>
+            <li><strong>400:</strong> Bestellung ist unverständlich.</li>
+            <li><strong>403:</strong> Du darfst nicht bestellen.</li>
+            <li><strong>404:</strong> Restaurant gibt es nicht.</li>
+            <li><strong>500:</strong> Küche brennt.</li>
+        </ul>
+    </section>
+
+</body>
+
+</html>
