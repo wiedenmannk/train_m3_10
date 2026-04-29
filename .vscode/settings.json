@@ -2,4 +2,10 @@
     "editor.formatOnSave": true,
     "editor.fontWeight": "normal",
     "editor.fontSize": 16,
+    "html.autoClosingTags": true,
+    "editor.autoClosingBrackets": "always",
+    "editor.autoClosingQuotes": "always",
+    "emmet.includeLanguages": {
+        "php": "html"
+    }
 }
