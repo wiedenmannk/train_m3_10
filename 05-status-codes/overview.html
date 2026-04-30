@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTTP Statuscodes – Verständnis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 40px;
+        }
+
+        .slide {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .card {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .success {
+            background: #66bb6a;
+        }
+
+        .client {
+            background: #ef5350;
+        }
+
+        .server {
+            background: #8e24aa;
+        }
+
+        .code {
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+
+        .compare {
+            margin-top: 25px;
+            background: #fff3e0;
+            padding: 15px;
+            border-left: 5px solid #ffa726;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="slide">
+        <h1>🌐 HTTP Statuscodes – verstehen statt merken</h1>
+
+        <div class="card success">
+            <h2>2xx – Erfolg</h2>
+            <b>200 OK</b> → Seite wurde erfolgreich geladen<br>
+            <b>201 Created</b> → etwas wurde neu erstellt (z. B. Datensatz)<br>
+            <b>204 No Content</b> → erfolgreich, aber keine Antwort nötig
+
+            <div class="code">GET /index.html → 200</div>
+        </div>
+
+        <div class="card client">
+            <h2>4xx – Client Fehler</h2>
+            <b>400 Bad Request</b> → Anfrage falsch (z. B. falsche Daten)<br>
+            <b>401 Unauthorized</b> → nicht eingeloggt<br>
+            <b>403 Forbidden</b> → keine Berechtigung<br>
+            <b>404 Not Found</b> → Seite existiert nicht
+
+            <div class="code">GET /admin → 401</div>
+        </div>
+
+        <div class="card server">
+            <h2>5xx – Server Fehler</h2>
+            <b>500 Internal Server Error</b> → Fehler im eigenen Server (z. B. PHP crash)<br>
+            <b>502 Bad Gateway</b> → Server bekommt falsche Antwort von anderem Server<br>
+            <b>503 Service Unavailable</b> → Server ist überlastet oder down
+
+            <div class="code">POST /save → 500</div>
+        </div>
+
+        <div class="compare">
+            <h3>🔥 Wichtige Unterschiede (Prüfungsfalle!)</h3>
+
+            <b>500 vs 502 vs 503:</b><br><br>
+
+            <b>500</b> → Fehler im eigenen Code<br>
+            👉 Beispiel: PHP Script kaputt<br><br>
+
+            <b>502</b> → Fehler bei Kommunikation mit anderem Server<br>
+            👉 Beispiel: Backend antwortet falsch<br><br>
+
+            <b>503</b> → Server funktioniert, aber ist überlastet / nicht verfügbar<br>
+            👉 Beispiel: Wartung oder zu viele Nutzer
+        </div>
+
+        <div class="compare">
+            <b>401 vs 403:</b><br><br>
+
+            <b>401</b> → „Wer bist du?“ (Login fehlt)<br>
+            <b>403</b> → „Ich kenne dich, aber du darfst nicht rein“
+        </div>
+
+    </div>
+</body>
+
+</html>
