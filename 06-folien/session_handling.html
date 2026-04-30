@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Session & Header</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #3f51b5;
+        }
+
+        .step {
+            background: #eef2ff;
+            padding: 12px;
+            margin: 10px 0;
+            border-left: 5px solid #3f51b5;
+            border-radius: 6px;
+        }
+
+        .code {
+            background: #1e1e1e;
+            color: #00ff9c;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            margin-top: 5px;
+        }
+
+        .highlight {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+
+        .danger {
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        .success {
+            background: #d4edda;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+
+    <h1>Session & Header – Wie erkennt der Server dich?</h1>
+
+    <div class="step">
+        <strong>1. Login</strong><br>
+        Server erstellt eine Session
+        <div class="code">
+Session-ID: abc123
+        </div>
+    </div>
+
+    <div class="step">
+        <strong>2. Server antwortet (Response-Header)</strong>
+        <div class="code">
+Set-Cookie: PHPSESSID=abc123
+        </div>
+    </div>
+
+    <div class="step">
+        <strong>3. Browser speichert Cookie</strong>
+        <div class="code">
+PHPSESSID = abc123
+        </div>
+    </div>
+
+    <div class="step">
+        <strong>4. Nächster Request (Request-Header)</strong>
+        <div class="code">
+GET /dashboard.php HTTP/1.1
+Cookie: PHPSESSID=abc123
+        </div>
+    </div>
+
+    <div class="step">
+        <strong>5. Server erkennt dich wieder</strong>
+        <div class="code">
+abc123 → User Klaus
+        </div>
+    </div>
+
+    <div class="highlight">
+        💡 <strong>Merksatz:</strong><br>
+        Die Session liegt auf dem Server.<br>
+        Der Browser bringt nur den Schlüssel (Session-ID) mit.
+    </div>
+
+    <div class="success">
+        ✔ Beispiel Log (normal):<br>
+        <div class="code">
+POST /login.php 200
+GET /dashboard.php 200
+        </div>
+    </div>
+
+    <div class="danger">
+        ⚠ Beispiel Problem:<br>
+        Kein Cookie → neue Session<br>
+        <div class="code">
+GET /dashboard.php 200
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
